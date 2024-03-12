@@ -81,7 +81,7 @@ const Header = () => {
        
         
           <Label className='text-white'>
-            Pyramid Dev
+         Smartcon AR
           </Label>
       {/* </Nav> */}
       {/******************************/}
