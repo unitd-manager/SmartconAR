@@ -2,11 +2,14 @@ import React from 'react';
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-export default function ClientMainDetails({ handleInputs, clientsDetails, allCountries }) {
+export default function ClientMainDetails({ handleInputs, clientsDetails, allCountries ,arb,eng,arabic}) {
   ClientMainDetails.propTypes = {
     handleInputs: PropTypes.func,
     clientsDetails: PropTypes.any,
     allCountries: PropTypes.any,
+    arb:PropTypes.any,
+    eng:PropTypes.any,
+    arabic:PropTypes.any,
   };
   return (
     <Form>
@@ -25,6 +28,42 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
               />
             </FormGroup>
           </Col>
+
+          { eng === true &&
+        <Col md="3">
+      <FormGroup>
+        <Label dir="rtl" style={{ textAlign: 'right' }}>
+        {arabic.length > 0 && arabic[0].english_value}    {/*Access the value property */}
+         <span className="required"> *</span>
+        </Label>
+        <Input
+          type="text"
+          onChange={handleInputs}
+          value={clientsDetails && clientsDetails.company_name}
+          name="company_name"
+        />
+      </FormGroup>
+    </Col>
+       }
+
+    {arb===true &&
+        <Col md="3">
+      <FormGroup>
+        <Label dir="rtl" style={{ textAlign: 'right' }}>
+        {arabic.length > 0 && arabic[0].value}    {/*Access the value property */}
+         <span className="required">*</span> 
+        </Label>
+        <Input
+          type="text"
+          onChange={handleInputs}
+          value={clientsDetails && clientsDetails.company_name_arb}
+          name="company_name_arb"
+        />
+      </FormGroup>
+    </Col>
+       }
+
+       
           <Col md="3">
             <FormGroup>
               <Label>Phone</Label>
@@ -36,17 +75,44 @@ export default function ClientMainDetails({ handleInputs, clientsDetails, allCou
               />
             </FormGroup>
           </Col>
-          <Col md="3">
-            <FormGroup>
-              <Label>Website </Label>
-              <Input
-                type="text"
-                onChange={handleInputs}
-                value={clientsDetails && clientsDetails.website}
-                name="website"
-              />
-            </FormGroup>
-          </Col>
+
+
+          { eng === true &&
+        <Col md="3">
+      <FormGroup>
+        <Label dir="rtl" style={{ textAlign: 'right' }}>
+       
+        {arabic.find(item => item.key_text === 'cm.websiteClient')?.english_value}  {/*Access the value property */}
+         <span className="required"> *</span>
+        </Label>
+        <Input
+          type="text"
+          onChange={handleInputs}
+          value={clientsDetails && clientsDetails.website}
+          name="website"
+        />
+      </FormGroup>
+    </Col>
+       }
+
+    {arb===true &&
+        <Col md="3">
+      <FormGroup>
+        <Label dir="rtl" style={{ textAlign: 'right' }}>
+        
+        {arabic.find(item => item.key_text === 'cm.websiteClient')?.value}   {/*Access the value property */}
+         <span className="required">*</span> 
+        </Label>
+        <Input
+          type="text"
+          onChange={handleInputs}
+          value={clientsDetails && clientsDetails.website_arb}
+          name="website_arb"
+        />
+      </FormGroup>
+    </Col>
+       }
+  
           <Col md="3">
             <FormGroup>
               <Label>Email</Label>

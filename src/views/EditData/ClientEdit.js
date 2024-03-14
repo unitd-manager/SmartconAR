@@ -21,6 +21,7 @@ import AddNote from '../../components/Tender/AddNote';
 import ViewNote from '../../components/Tender/ViewNote';
 import creationdatetime from '../../constants/creationdatetime';
 import Tab from '../../components/project/Tab';
+import TabArab from '../../components/project/TabArab';
 
 const ClientsEdit = () => {
   //Const Variables
@@ -34,6 +35,15 @@ const ClientsEdit = () => {
   const [tenderDetails, setTenderDetails] = useState();
   const [invoiceDetails, setInvoiceDetails] = useState();
   const [allCountries, setallCountries] = useState();
+
+  const getSelectedLanguageFromLocalStorage = () => {
+    return localStorage.getItem('selectedLanguage') || '';
+  };
+  
+const selectedLanguage = getSelectedLanguageFromLocalStorage();
+
+// Use the selected language value as needed
+console.log('Selected language from localStorage:', selectedLanguage);
 
   // Navigation and Parameter Constants
   const { id } = useParams();
@@ -51,6 +61,14 @@ const ClientsEdit = () => {
     {id:'3',name:'Invoice Linked'},
     {id:'4',name:'Tender Linked'},
     {id:'5',name:'Add notes'},
+  ];
+
+  const tabsArb =  [
+    {id:'1',name:'جهات الاتصال المرتبطة'},
+    {id:'2',name:'المشاريع المرتبطة'},
+    {id:'3',name:'الفاتورة مرتبطة'},
+    {id:'4',name:'مناقصة مرتبطة'},
+    {id:'5',name:'أضف ملاحظات'},
   ];
 
   const toggle = (tab) => {
@@ -202,6 +220,41 @@ const ClientsEdit = () => {
        // message('Tender Data Not Found', 'info');
       });
   };
+
+  const [arabic, setArabic] = useState([]);
+
+
+  const arb =selectedLanguage === 'Arabic'
+
+  const eng =selectedLanguage === 'English'
+  
+
+  const getArabicCompanyName = () => {
+    if(selectedLanguage === 'Arabic'){
+      api
+      .get('/translation/getTranslationForCompany')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+    }else{
+      api
+      .get('/translation/getTranslationEnglish')
+      .then((res) => {
+        setArabic(res.data.data);
+      })
+      .catch(() => {
+        // Handle error if needed
+      });
+    }
+   
+  };
+  console.log('arabic',arabic)
+  useEffect(() => {
+    getArabicCompanyName();
+  }, []);
   //Api for getting all countries
   const getAllCountries = () => {
     api
@@ -269,12 +322,21 @@ const ClientsEdit = () => {
           handleInputs={handleInputs}
           clientsDetails={clientsDetails}
           allCountries={allCountries}
+          arb={arb}
+          eng={eng}
+          arabic={arabic}
         ></ClientMainDetails>
       </ComponentCard>
       <ComponentCard title="More Details">
         <ToastContainer></ToastContainer>
         {/* Nav Tab */}
+        {eng === true &&
         <Tab toggle={toggle} tabs={tabs} />
+        }
+        { arb === true &&
+        <TabArab toggle={toggle} tabsArb={tabsArb} />
+        }
+        
         <TabContent className="p-4" activeTab={activeTab}>
           {/* Contact Linked */}
           <TabPane tabId="1">
